@@ -42,5 +42,44 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/MCAnswersSpinner" />
 
+    <TextView
+        android:id="@+id/tvOnScreenTimerTitleMC"
+        android:layout_width="106dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="52dp"
+        android:text="Total time when visible on screen:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSubmit" />
+
+    <TextView
+        android:id="@+id/tvOnScreenTimerMC"
+        android:layout_width="262dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="52dp"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintStart_toEndOf="@+id/tvOnScreenTimerTitleMC"
+        app:layout_constraintTop_toBottomOf="@+id/btnSubmit" />
+
+    <TextView
+        android:id="@+id/tvTotalTimerMC"
+        android:layout_width="262dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="44dp"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintStart_toStartOf="@+id/tvOnScreenTimerMC"
+        app:layout_constraintTop_toBottomOf="@+id/tvOnScreenTimerMC" />
+
+    <TextView
+        android:id="@+id/tvTotalTimerTitleMC"
+        android:layout_width="107dp"
+        android:layout_height="66dp"
+        android:text="Total time:"
+        app:layout_constraintStart_toStartOf="@+id/tvOnScreenTimerTitleMC"
+        app:layout_constraintTop_toTopOf="@+id/tvTotalTimerMC" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,6 +7,45 @@
     tools:context=".FillInTheBlankActivity">
 
     <TextView
+        android:id="@+id/tvTotalTimerFTB"
+        android:layout_width="262dp"
+        android:layout_height="41dp"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintStart_toStartOf="@+id/tvOnScreenTimerFTB"
+        app:layout_constraintTop_toTopOf="@+id/tvTotalTimerTitleFTB" />
+
+    <TextView
+        android:id="@+id/tvTotalTimerTitleFTB"
+        android:layout_width="107dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="36dp"
+        android:text="Total time:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvOnScreenTimerTitleFTB" />
+
+    <TextView
+        android:id="@+id/tvOnScreenTimerFTB"
+        android:layout_width="262dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="8dp"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintStart_toEndOf="@+id/tvOnScreenTimerTitleFTB"
+        app:layout_constraintTop_toTopOf="@+id/tvOnScreenTimerTitleFTB" />
+
+    <TextView
+        android:id="@+id/tvOnScreenTimerTitleFTB"
+        android:layout_width="106dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="36dp"
+        android:text="Total time when visible on screen:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSubmitFillTheBlank" />
+
+    <TextView
         android:id="@+id/tvFillTheBlank"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
