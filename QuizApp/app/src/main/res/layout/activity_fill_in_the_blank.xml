@@ -1,82 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".FillInTheBlankActivity">
 
-    <TextView
-        android:id="@+id/tvTotalTimerFTB"
-        android:layout_width="262dp"
-        android:layout_height="41dp"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintStart_toStartOf="@+id/tvOnScreenTimerFTB"
-        app:layout_constraintTop_toTopOf="@+id/tvTotalTimerTitleFTB" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvTotalTimerTitleFTB"
-        android:layout_width="107dp"
-        android:layout_height="66dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="36dp"
-        android:text="Total time:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvOnScreenTimerTitleFTB" />
+        <Button
+            android:id="@+id/btnConfigFTB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="Configuration"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvOnScreenTimerFTB"
-        android:layout_width="262dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="8dp"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintStart_toEndOf="@+id/tvOnScreenTimerTitleFTB"
-        app:layout_constraintTop_toTopOf="@+id/tvOnScreenTimerTitleFTB" />
+        <TextView
+            android:id="@+id/tvOnScreenTimerTitleFTB"
+            android:layout_width="106dp"
+            android:layout_height="72dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Total time when visible on screen:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvOnScreenTimerTitleFTB"
-        android:layout_width="106dp"
-        android:layout_height="72dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="36dp"
-        android:text="Total time when visible on screen:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSubmitFillTheBlank" />
+        <TextView
+            android:id="@+id/tvTotalTimerTitleFTB"
+            android:layout_width="107dp"
+            android:layout_height="66dp"
+            android:layout_marginTop="20dp"
+            android:text="Total time:"
+            app:layout_constraintStart_toStartOf="@+id/tvOnScreenTimerTitleFTB"
+            app:layout_constraintTop_toBottomOf="@+id/tvOnScreenTimerTitleFTB" />
 
-    <TextView
-        android:id="@+id/tvFillTheBlank"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="The sport that we're discussing is called ___"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.115"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/tvOnScreenTimerFTB"
+            android:layout_width="96dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="20dp"
+            android:text="00:00:00"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintStart_toEndOf="@+id/tvOnScreenTimerTitleFTB"
+            app:layout_constraintTop_toTopOf="@+id/tvOnScreenTimerTitleFTB" />
 
-    <EditText
-        android:id="@+id/etFITBUserAnswer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
-        android:ems="10"
-        android:hint="Type your answer here"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.079"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvFillTheBlank" />
+        <TextView
+            android:id="@+id/tvTotalTimerFTB"
+            android:layout_width="96dp"
+            android:layout_height="34dp"
+            android:text="00:00:00"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintStart_toStartOf="@+id/tvOnScreenTimerFTB"
+            app:layout_constraintTop_toTopOf="@+id/tvTotalTimerTitleFTB" />
 
-    <Button
-        android:id="@+id/btnSubmitFillTheBlank"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="56dp"
-        android:text="Submit Answer"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etFITBUserAnswer" />
+        <TextView
+            android:id="@+id/tvFillTheBlank"
+            android:layout_width="366dp"
+            android:layout_height="63dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="56dp"
+            android:text="The sport that we're discussing is called ___"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTotalTimerTitleFTB" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <EditText
+            android:id="@+id/etFITBUserAnswer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="56dp"
+            android:ems="10"
+            android:hint="Type your answer here"
+            android:inputType="textAutoCorrect|textAutoComplete"
+            app:layout_constraintStart_toStartOf="@+id/tvFillTheBlank"
+            app:layout_constraintTop_toBottomOf="@+id/tvFillTheBlank" />
+
+        <Button
+            android:id="@+id/btnSubmitFillTheBlank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="56dp"
+            android:text="Submit Answer"
+            app:layout_constraintStart_toStartOf="@+id/etFITBUserAnswer"
+            app:layout_constraintTop_toBottomOf="@+id/etFITBUserAnswer" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

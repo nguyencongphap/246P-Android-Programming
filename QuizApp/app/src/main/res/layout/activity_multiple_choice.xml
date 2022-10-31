@@ -1,85 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MultipleChoiceActivity">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/MCQuestionTextView"
-        android:layout_width="349dp"
-        android:layout_height="88dp"
-        android:layout_marginTop="40dp"
-        android:text="Which male tennis athlete has the most Grand Slam titles right now?"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.258"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/MCQuestionTextView"
+            android:layout_width="349dp"
+            android:layout_height="88dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="64dp"
+            android:text="@string/MCQuestion1"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTotalTimerTitleMC" />
 
-    <Spinner
-        android:id="@+id/MCAnswersSpinner"
-        android:layout_width="252dp"
-        android:layout_height="38dp"
-        android:layout_marginTop="44dp"
-        android:entries="@array/mc_answers"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/MCQuestionTextView"
-        tools:ignore="MissingConstraints" />
+        <Spinner
+            android:id="@+id/MCAnswersSpinner1"
+            android:layout_width="252dp"
+            android:layout_height="38dp"
+            android:layout_marginTop="20dp"
+            android:entries="@array/mc_answers"
+            app:layout_constraintStart_toStartOf="@+id/MCQuestionTextView"
+            app:layout_constraintTop_toBottomOf="@+id/MCQuestionTextView"
+            tools:ignore="MissingConstraints" />
 
-    <Button
-        android:id="@+id/btnSubmit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:text="Submit Answer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.063"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/MCAnswersSpinner" />
+        <TextView
+            android:id="@+id/MCQuestionTextView2"
+            android:layout_width="349dp"
+            android:layout_height="88dp"
+            android:layout_marginTop="150dp"
+            android:text="@string/MCQuestion2"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="@+id/MCQuestionTextView"
+            app:layout_constraintTop_toBottomOf="@+id/MCAnswersSpinner1" />
 
-    <TextView
-        android:id="@+id/tvOnScreenTimerTitleMC"
-        android:layout_width="106dp"
-        android:layout_height="72dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="52dp"
-        android:text="Total time when visible on screen:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSubmit" />
+        <Spinner
+            android:id="@+id/MCAnswersSpinner2"
+            android:layout_width="252dp"
+            android:layout_height="38dp"
+            android:layout_marginTop="20dp"
+            android:entries="@array/mc_answers"
+            app:layout_constraintStart_toStartOf="@+id/MCQuestionTextView2"
+            app:layout_constraintTop_toBottomOf="@+id/MCQuestionTextView2"
+            tools:ignore="MissingConstraints" />
 
-    <TextView
-        android:id="@+id/tvOnScreenTimerMC"
-        android:layout_width="262dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="52dp"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintStart_toEndOf="@+id/tvOnScreenTimerTitleMC"
-        app:layout_constraintTop_toBottomOf="@+id/btnSubmit" />
+        <TextView
+            android:id="@+id/tvOnScreenTimerTitleMC"
+            android:layout_width="106dp"
+            android:layout_height="72dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Total time when visible on screen:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvTotalTimerMC"
-        android:layout_width="262dp"
-        android:layout_height="41dp"
-        android:layout_marginTop="44dp"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintStart_toStartOf="@+id/tvOnScreenTimerMC"
-        app:layout_constraintTop_toBottomOf="@+id/tvOnScreenTimerMC" />
+        <TextView
+            android:id="@+id/tvOnScreenTimerMC"
+            android:layout_width="101dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="0dp"
+            android:text="00:00:00"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintStart_toEndOf="@+id/tvOnScreenTimerTitleMC"
+            app:layout_constraintTop_toTopOf="@+id/tvOnScreenTimerTitleMC" />
 
-    <TextView
-        android:id="@+id/tvTotalTimerTitleMC"
-        android:layout_width="107dp"
-        android:layout_height="66dp"
-        android:text="Total time:"
-        app:layout_constraintStart_toStartOf="@+id/tvOnScreenTimerTitleMC"
-        app:layout_constraintTop_toTopOf="@+id/tvTotalTimerMC" />
+        <TextView
+            android:id="@+id/tvTotalTimerTitleMC"
+            android:layout_width="107dp"
+            android:layout_height="66dp"
+            android:text="Total time:"
+            app:layout_constraintStart_toStartOf="@+id/tvOnScreenTimerTitleMC"
+            app:layout_constraintTop_toTopOf="@+id/tvTotalTimerMC" />
 
+        <TextView
+            android:id="@+id/tvTotalTimerMC"
+            android:layout_width="104dp"
+            android:layout_height="37dp"
+            android:layout_marginTop="44dp"
+            android:text="00:00:00"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintStart_toStartOf="@+id/tvOnScreenTimerMC"
+            app:layout_constraintTop_toBottomOf="@+id/tvOnScreenTimerMC" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            android:text="Submit Answer"
+            app:layout_constraintStart_toStartOf="@+id/MCAnswersSpinner2"
+            app:layout_constraintTop_toBottomOf="@+id/MCAnswersSpinner2" />
+
+        <Button
+            android:id="@+id/btnConfigMC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="Configuration"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

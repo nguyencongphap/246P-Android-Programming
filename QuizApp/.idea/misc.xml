@@ -3,7 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/MSWE_Projects/246P_Android_Projects/QuizApp/app/src/main/res/layout/activity_fill_in_the_blank.xml" value="0.4" />
+        <entry key="..\:/MSWE_Projects/246P_Android_Projects/QuizApp/app/src/main/res/layout/activity_configuration.xml" value="0.4" />
+        <entry key="..\:/MSWE_Projects/246P_Android_Projects/QuizApp/app/src/main/res/layout/activity_fill_in_the_blank.xml" value="0.35909090909090907" />
         <entry key="..\:/MSWE_Projects/246P_Android_Projects/QuizApp/app/src/main/res/layout/activity_main.xml" value="0.39010416666666664" />
         <entry key="..\:/MSWE_Projects/246P_Android_Projects/QuizApp/app/src/main/res/layout/activity_multiple_choice.xml" value="0.39794871794871794" />
         <entry key="..\:/MSWE_Projects/246P_Android_Projects/QuizApp/app/src/main/res/layout/activity_result.xml" value="0.4" />

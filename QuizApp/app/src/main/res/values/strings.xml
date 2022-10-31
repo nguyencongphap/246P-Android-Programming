@@ -9,4 +9,6 @@
     </string-array>
     <string name="mc_solution">Rafael Nadal</string>
     <string name="fitb_solution">tennis</string>
+    <string name="MCQuestion1">Which male tennis athlete has the most Grand Slam titles right now?</string>
+    <string name="MCQuestion2">Which male tennis athlete has the most ATP 1000 titles right now?</string>
 </resources>
