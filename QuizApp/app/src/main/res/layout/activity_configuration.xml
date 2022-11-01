@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".ConfigurationActivity">
 
+    <TextView
+        android:id="@+id/tvSetTimeLimitSection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Set Time Limit for Question"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tvHideTimerSection"
+        app:layout_constraintTop_toBottomOf="@+id/switchQ1AppLifecycleTimer" />
+
     <Switch
         android:id="@+id/switchQ1AppLifecycleTimer"
         android:layout_width="wrap_content"
@@ -39,8 +49,20 @@
         android:id="@+id/btnUpdateConfig"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="60dp"
         android:text="Update"
         app:layout_constraintStart_toStartOf="@+id/tvHideTimerSection"
-        app:layout_constraintTop_toBottomOf="@+id/switchQ1AppLifecycleTimer" />
+        app:layout_constraintTop_toBottomOf="@+id/etTimeLimit" />
+
+    <EditText
+        android:id="@+id/etTimeLimit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="00:05:00"
+        android:inputType="time"
+        app:layout_constraintStart_toStartOf="@+id/tvSetTimeLimitSection"
+        app:layout_constraintTop_toBottomOf="@+id/tvSetTimeLimitSection" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

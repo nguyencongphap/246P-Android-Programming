@@ -1,12 +1,11 @@
 package com.example.quizapp.CustomJavaObjects;
 
-import android.os.Handler;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Timer implements Parcelable {
 
-    private int seconds;
+    private long seconds;
     private boolean isRunning;
 
     // Normal constructor, since this is still a normal object
@@ -27,11 +26,11 @@ public class Timer implements Parcelable {
         isRunning = false;
     }
 
-    public int getSeconds() {
+    public long getSeconds() {
         return seconds;
     }
 
-    public void setSeconds(int seconds) {
+    public void setSeconds(long seconds) {
         this.seconds = seconds;
     }
 
@@ -39,8 +38,11 @@ public class Timer implements Parcelable {
         return isRunning;
     }
 
-    public void setRunning(boolean running) {
-        isRunning = running;
+    public String getTimeRepresentation() {
+        long hours = seconds/3600;
+        long minutes = (seconds%3600)/60;
+        long secs = seconds%60;
+        return String.format("%02d:%02d:%02d", hours, minutes, secs);
     }
 
     // This is where you write the values you want to save to the `Parcel`.
@@ -49,7 +51,7 @@ public class Timer implements Parcelable {
     // You may need to make several classes Parcelable to send the data you want.
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(seconds);
+        parcel.writeLong(seconds);
         parcel.writeByte((byte) (isRunning ? 1 : 0));
     }
 

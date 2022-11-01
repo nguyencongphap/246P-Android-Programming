@@ -8,11 +8,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -29,6 +32,8 @@ public class MultipleChoiceActivity extends AppCompatActivity {
     private static int failCount = 0;
     private Timer onScreenTimer;
     private Timer lifeCycleTimer;
+    private long timeLimitInSeconds;
+    private boolean questionIsFinished;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,8 @@ public class MultipleChoiceActivity extends AppCompatActivity {
         availableAttempts = getResources().getStringArray(R.array.mc_answers).length - 2;
         onScreenTimer = new Timer();
         lifeCycleTimer = new Timer();
+        timeLimitInSeconds = -1;
+        questionIsFinished = false;
 
         // Set onClickListener to the submit answer button
         Button btnSubmit = findViewById(R.id.btnSubmit);
@@ -77,11 +84,13 @@ public class MultipleChoiceActivity extends AppCompatActivity {
                         if (data != null) {
                             hideOnScreenTimer = data.getExtras().getBoolean("hideOnScreenTimer");
                             hideLifecycleTimer = data.getExtras().getBoolean("hideLifecycleTimer");
+                            timeLimitInSeconds = data.getExtras().getLong("timeLimit");
                         }
 
                         Log.d(TAG, "onActivityResult: \n" +
                                 "hideOnScreenTimer: " + hideOnScreenTimer + "\n" +
-                                "hideLifecycleTimer: "  + hideLifecycleTimer + "\n"
+                                "hideLifecycleTimer: "  + hideLifecycleTimer + "\n" +
+                                "timeLimit: " +  timeLimitInSeconds
                         );
 
                         findViewById(R.id.tvOnScreenTimerMC).setVisibility(hideOnScreenTimer ? View.INVISIBLE : View.VISIBLE );
@@ -104,6 +113,7 @@ public class MultipleChoiceActivity extends AppCompatActivity {
         savedInstanceState.putInt("availableAttempts", availableAttempts);
         savedInstanceState.putInt("passCount", passCount);
         savedInstanceState.putInt("failCount", failCount);
+
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -116,22 +126,31 @@ public class MultipleChoiceActivity extends AppCompatActivity {
         availableAttempts = savedInstanceState.getInt("availableAttempts");
         passCount = savedInstanceState.getInt("passCount");
         failCount = savedInstanceState.getInt("failCount");
-    }
 
-    // This is called when the activity is no longer in the foreground
-    // (though it may still be visible if the user is in multi-window mode)
-    // it's best to save state through the use of Shared Preferences in using onPause
-    // TODO: Add implementations to onPause and onEdit so that chosen choices are not reset when hit Back
-    @Override
-    protected void onPause() {
-        super.onPause();
-        onScreenTimer.stopTimer();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         onScreenTimer.allowTimerToRun();
+    }
+
+    // This is called when the activity is no longer in the foreground
+    // (though it may still be visible if the user is in multi-window mode)
+    // it's best to save state through the use of Shared Preferences in using onPause
+    @Override
+    protected void onPause() {
+        super.onPause();
+        onScreenTimer.stopTimer();
+    }
+
+    private void loadResultActivityWithFail() {
+        // load ResultActivity that user has FAILED
+        questionIsFinished = true;
+        incrementFailCount();
+        Intent i = new Intent(MultipleChoiceActivity.this, ResultActivity.class);
+        i.putExtra("userPassedQuiz", false);
+        startActivity(i);
     }
 
     private void onClickSubmitAnswer() {
@@ -144,17 +163,14 @@ public class MultipleChoiceActivity extends AppCompatActivity {
         final String solution2 = "Novak Djokovic";
 
         if (choice1.equals(solution1) && choice2.equals(solution2)) {
+            questionIsFinished = true;
             Intent i = new Intent(this, FillInTheBlankActivity.class);
             startActivity(i);
         }
         else {
             availableAttempts--;
             if (availableAttempts == 0) {
-                incrementFailCount();
-                // load ResultActivity that user has FAILED
-                Intent i = new Intent(this, ResultActivity.class);
-                i.putExtra("userPassedQuiz", false);
-                startActivity(i);
+                loadResultActivityWithFail();
             }
             else {
                 Toast.makeText(getApplicationContext(), "You have "
@@ -163,28 +179,42 @@ public class MultipleChoiceActivity extends AppCompatActivity {
         }
     }
 
-    public static void runTimer(Timer timer, TextView targetTimerTextView) {
+    public void runTimer(Timer timer, TextView targetTimerTextView) {
         final Handler handler = new Handler();
         handler.post(new Runnable() {
             @Override
             public void run() {
-                int totalSeconds = timer.getSeconds();
-                int hours = totalSeconds/3600;
-                int minutes = (totalSeconds%3600)/60;
-                int secs = totalSeconds%60;
-                String time = String.format("%d:%02d:%02d", hours, minutes, secs);
+                targetTimerTextView.setText(timer.getTimeRepresentation());
 
-                targetTimerTextView.setText(time);
+                if (timeLimitInSeconds > -1) {
+
+                    Log.d(TAG, "run: \n" +
+                            "timer.getSeconds(): " + timer.getSeconds() + "\n" +
+                            "timeLimitInSeconds: " + timeLimitInSeconds + "\n");
+                    
+                    if (timer.getSeconds() >= timeLimitInSeconds) {
+                        // load ResultActivity that user has FAILED
+                        loadResultActivityWithFail();
+                        // Remove any pending posts of callbacks and sent messages whose obj is token. If token is null, all callbacks and messages will be removed.
+                        return;
+                    }
+                }
 
                 if (timer.isRunning()) {
-                    timer.setSeconds(timer.getSeconds()+1);
+                    long sum = timer.getSeconds() + 1L;
+                    if (sum > Long.MAX_VALUE) {
+                        throw new ArithmeticException("Overflow in summing long variables!");
+                    }
+                    timer.setSeconds(sum);
                 }
 
                 // Post the code in the Runnable to be run again after
                 // a delay of 1,000 ms or 1 s.
                 // As this line of code is included in the Runnable's run() method,
                 // this run() method will keep getting called.
-                handler.postDelayed(this, 1000);
+                if (!questionIsFinished) {
+                    handler.postDelayed(this, 1000);
+                }
             }
         });
     }
