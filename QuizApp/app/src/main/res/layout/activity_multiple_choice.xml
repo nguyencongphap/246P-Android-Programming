@@ -91,7 +91,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tvOnScreenTimerMC" />
 
         <Button
-            android:id="@+id/btnSubmit"
+            android:id="@+id/btnSubmitMC"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="150dp"
@@ -109,6 +109,18 @@
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/imgbtnSubmitMC"
+            android:layout_width="162dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/btnSubmitMC"
+            app:layout_constraintTop_toBottomOf="@+id/btnSubmitMC"
+            app:srcCompat="@android:drawable/ic_menu_gallery" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

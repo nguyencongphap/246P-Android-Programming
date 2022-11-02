@@ -26,6 +26,7 @@ public class ConfigurationActivity extends AppCompatActivity {
     private Switch switchOnScreenTimer;
     private Switch switchLifecycleTimer;
     private EditText etTimeLimit;
+    private Switch switchUseImageButtons;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,9 @@ public class ConfigurationActivity extends AppCompatActivity {
 
         etTimeLimit = findViewById(R.id.etTimeLimit);
 
+        switchUseImageButtons = findViewById(R.id.switchUseImgBtn);
+        switchUseImageButtons.setChecked(getIntent().getBooleanExtra("useImageButtons", false));
+
         Button btnUpdateConfig = findViewById(R.id.btnUpdateConfig);
         btnUpdateConfig.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,12 +62,15 @@ public class ConfigurationActivity extends AppCompatActivity {
         Intent intentReturnToParentActivity = new Intent();
         intentReturnToParentActivity.putExtra("hideOnScreenTimer", switchOnScreenTimer.isChecked());
         intentReturnToParentActivity.putExtra("hideLifecycleTimer", switchLifecycleTimer.isChecked());
+
         intentReturnToParentActivity.putExtra("timeLimit", convertToSeconds(etTimeLimit.getText().toString()));
+        intentReturnToParentActivity.putExtra("useImageButtons", switchUseImageButtons.isChecked());
 
         Log.d(TAG, "onClick btnUpdateConfig:\n"
                 + "hideOnScreenTimer: " + intentReturnToParentActivity.getExtras().getBoolean("hideOnScreenTimer") + "\n"
                 + "hideLifecycleTimer: " + intentReturnToParentActivity.getExtras().getBoolean("hideLifecycleTimer") + "\n"
                 + "timeLimit: " + intentReturnToParentActivity.getExtras().getLong("timeLimit") + "\n"
+                + "useImageButtons: " + intentReturnToParentActivity.getExtras().getBoolean("useImageButtons") + "\n"
         );
 
         // Return config data to the parent activity
@@ -72,6 +79,10 @@ public class ConfigurationActivity extends AppCompatActivity {
     }
 
     private long convertToSeconds(String timeStrInput) {
+        if (timeStrInput == null | timeStrInput.equals("")) {
+            return -1;
+        }
+
         String[] timeData = timeStrInput.split(":");
         String hours = timeData[0];
         String minutes = timeData[1];

@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +28,10 @@ public class FillInTheBlankActivity extends AppCompatActivity {
     private static int availableAttempts;
     private Timer onScreenTimer;
     private Timer lifeCycleTimer;
-    private static long timeLimitInSeconds;
+    private boolean hideOnScreenTimer;
+    private boolean hideLifecycleTimer;
+    private long timeLimitInSeconds;
+    private boolean useImageButtons;
     private boolean questionIsFinished;
 
     @Override
@@ -38,12 +42,22 @@ public class FillInTheBlankActivity extends AppCompatActivity {
         availableAttempts = 2;
         onScreenTimer = new Timer();
         lifeCycleTimer = new Timer();
+        hideOnScreenTimer = false;
+        hideLifecycleTimer = false;
         timeLimitInSeconds = -1;
+        useImageButtons = false;
         questionIsFinished = false;
 
         // Set onClickListener to the submit answer button
-        Button btnSubmit = findViewById(R.id.btnSubmitFillTheBlank);
+        Button btnSubmit = findViewById(R.id.btnSubmitFTB);
         btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickSubmitAnswer();
+            }
+        });
+        ImageButton imgbtnSubmit = findViewById(R.id.imgbtnSubmitFTB);
+        imgbtnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onClickSubmitAnswer();
@@ -74,29 +88,48 @@ public class FillInTheBlankActivity extends AppCompatActivity {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data = result.getData();
                         // Get the data passed from ConfigurationActivity
-                        boolean hideOnScreenTimer = false;
-                        boolean hideLifecycleTimer = false;
                         if (data != null) {
                             hideOnScreenTimer = data.getExtras().getBoolean("hideOnScreenTimer");
                             hideLifecycleTimer = data.getExtras().getBoolean("hideLifecycleTimer");
                             timeLimitInSeconds = data.getExtras().getLong("timeLimit");
+                            useImageButtons = data.getExtras().getBoolean("useImageButtons");
                         }
 
                         Log.d(TAG, "onActivityResult in FillInTheBlankActivity: \n" +
                                 "hideOnScreenTimer: " + hideOnScreenTimer + "\n" +
                                 "hideLifecycleTimer: "  + hideLifecycleTimer + "\n" +
-                                "timeLimit: " +  timeLimitInSeconds
+                                "timeLimit: " +  timeLimitInSeconds + "\n" +
+                                "useImageButtons: " + useImageButtons + "\n"
                         );
 
-                        findViewById(R.id.tvOnScreenTimerFTB).setVisibility(hideOnScreenTimer ? View.INVISIBLE : View.VISIBLE );
-                        findViewById(R.id.tvTotalTimerFTB).setVisibility(hideLifecycleTimer ? View.INVISIBLE : View.VISIBLE);
+                        showTimerConfigPreference();
+                        showButtonConfigPreference();
                     }
                 }
             }
     );
 
+    private void showTimerConfigPreference() {
+        findViewById(R.id.tvOnScreenTimerFTB).setVisibility(hideOnScreenTimer ? View.INVISIBLE : View.VISIBLE );
+        findViewById(R.id.tvTotalTimerFTB).setVisibility(hideLifecycleTimer ? View.INVISIBLE : View.VISIBLE);
+    }
+
+    private void showButtonConfigPreference() {
+        if (useImageButtons) {
+            findViewById(R.id.btnSubmitFTB).setVisibility(View.INVISIBLE);
+            findViewById(R.id.imgbtnSubmitFTB).setVisibility(View.VISIBLE);
+        }
+        else {
+            findViewById(R.id.btnSubmitFTB).setVisibility(View.VISIBLE);
+            findViewById(R.id.imgbtnSubmitFTB).setVisibility(View.INVISIBLE);
+        }
+    }
+
     private void startConfigurationActivity() {
         Intent i = new Intent(this, ConfigurationActivity.class);
+        i.putExtra("onScreenTimerIsVisible", findViewById(R.id.tvOnScreenTimerFTB).getVisibility() == View.INVISIBLE);
+        i.putExtra("lifecycleTimerIsVisible", findViewById(R.id.tvTotalTimerFTB).getVisibility() == View.INVISIBLE);
+        i.putExtra("useImageButtons", findViewById(R.id.imgbtnSubmitFTB).getVisibility() == View.VISIBLE);
         configurationActivityLauncher.launch(i);
     }
 
@@ -104,6 +137,11 @@ public class FillInTheBlankActivity extends AppCompatActivity {
     protected void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
         // Save custom values into the bundle
         savedInstanceState.putInt("availableAttempts", availableAttempts);
+        savedInstanceState.putBoolean("hideOnScreenTimer", hideOnScreenTimer);
+        savedInstanceState.putBoolean("hideLifecycleTimer", hideLifecycleTimer);
+        savedInstanceState.putLong("timeLimit", timeLimitInSeconds);
+        savedInstanceState.putBoolean("useImageButtons", useImageButtons);
+
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -114,6 +152,13 @@ public class FillInTheBlankActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
 
         availableAttempts = savedInstanceState.getInt("availableAttempts");
+        hideOnScreenTimer = savedInstanceState.getBoolean("hideOnScreenTimer");
+        hideLifecycleTimer = savedInstanceState.getBoolean("hideLifecycleTimer");
+        timeLimitInSeconds = savedInstanceState.getLong("timeLimit");
+        useImageButtons = savedInstanceState.getBoolean("useImageButtons");
+
+        showTimerConfigPreference();
+        showButtonConfigPreference();
     }
 
     @Override

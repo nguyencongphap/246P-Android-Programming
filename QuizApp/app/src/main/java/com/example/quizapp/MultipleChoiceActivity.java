@@ -8,15 +8,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +30,10 @@ public class MultipleChoiceActivity extends AppCompatActivity {
     private static int failCount = 0;
     private Timer onScreenTimer;
     private Timer lifeCycleTimer;
+    private boolean hideOnScreenTimer;
+    private boolean hideLifecycleTimer;
     private long timeLimitInSeconds;
+    private boolean useImageButtons;
     private boolean questionIsFinished;
 
     @Override
@@ -43,12 +44,22 @@ public class MultipleChoiceActivity extends AppCompatActivity {
         availableAttempts = getResources().getStringArray(R.array.mc_answers).length - 2;
         onScreenTimer = new Timer();
         lifeCycleTimer = new Timer();
+        hideOnScreenTimer = false;
+        hideLifecycleTimer = false;
         timeLimitInSeconds = -1;
+        useImageButtons = false;
         questionIsFinished = false;
 
         // Set onClickListener to the submit answer button
-        Button btnSubmit = findViewById(R.id.btnSubmit);
+        Button btnSubmit = findViewById(R.id.btnSubmitMC);
         btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickSubmitAnswer();
+            }
+        });
+        ImageButton imgbtnSubmit = findViewById(R.id.imgbtnSubmitMC);
+        imgbtnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onClickSubmitAnswer();
@@ -79,31 +90,50 @@ public class MultipleChoiceActivity extends AppCompatActivity {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data = result.getData();
                         // Get the data passed from ConfigurationActivity
-                        boolean hideOnScreenTimer = false;
-                        boolean hideLifecycleTimer = false;
+
+
                         if (data != null) {
                             hideOnScreenTimer = data.getExtras().getBoolean("hideOnScreenTimer");
                             hideLifecycleTimer = data.getExtras().getBoolean("hideLifecycleTimer");
                             timeLimitInSeconds = data.getExtras().getLong("timeLimit");
+                            useImageButtons = data.getExtras().getBoolean("useImageButtons");
                         }
 
-                        Log.d(TAG, "onActivityResult: \n" +
+                        Log.d(TAG, "onActivityResult in FillInTheBlankActivity: \n" +
                                 "hideOnScreenTimer: " + hideOnScreenTimer + "\n" +
                                 "hideLifecycleTimer: "  + hideLifecycleTimer + "\n" +
-                                "timeLimit: " +  timeLimitInSeconds
+                                "timeLimit: " +  timeLimitInSeconds + "\n" +
+                                "useImageButtons: " + useImageButtons + "\n"
                         );
 
-                        findViewById(R.id.tvOnScreenTimerMC).setVisibility(hideOnScreenTimer ? View.INVISIBLE : View.VISIBLE );
-                        findViewById(R.id.tvTotalTimerMC).setVisibility(hideLifecycleTimer ? View.INVISIBLE : View.VISIBLE);
+                        showTimerConfigPreference();
+                        showButtonConfigPreference();
                     }
                 }
             }
     );
 
+    private void showTimerConfigPreference() {
+        findViewById(R.id.tvOnScreenTimerMC).setVisibility(hideOnScreenTimer ? View.INVISIBLE : View.VISIBLE );
+        findViewById(R.id.tvTotalTimerMC).setVisibility(hideLifecycleTimer ? View.INVISIBLE : View.VISIBLE);
+    }
+
+    private void showButtonConfigPreference() {
+        if (useImageButtons) {
+            findViewById(R.id.btnSubmitMC).setVisibility(View.INVISIBLE);
+            findViewById(R.id.imgbtnSubmitMC).setVisibility(View.VISIBLE);
+        }
+        else {
+            findViewById(R.id.btnSubmitMC).setVisibility(View.VISIBLE);
+            findViewById(R.id.imgbtnSubmitMC).setVisibility(View.INVISIBLE);
+        }
+    }
+
     private void startConfigurationActivity() {
         Intent i = new Intent(this, ConfigurationActivity.class);
         i.putExtra("onScreenTimerIsVisible", findViewById(R.id.tvOnScreenTimerMC).getVisibility() == View.INVISIBLE);
         i.putExtra("lifecycleTimerIsVisible", findViewById(R.id.tvTotalTimerMC).getVisibility() == View.INVISIBLE);
+        i.putExtra("useImageButtons", findViewById(R.id.imgbtnSubmitMC).getVisibility() == View.VISIBLE);
         configurationActivityLauncher.launch(i);
     }
 
@@ -113,6 +143,10 @@ public class MultipleChoiceActivity extends AppCompatActivity {
         savedInstanceState.putInt("availableAttempts", availableAttempts);
         savedInstanceState.putInt("passCount", passCount);
         savedInstanceState.putInt("failCount", failCount);
+        savedInstanceState.putBoolean("hideOnScreenTimer", hideOnScreenTimer);
+        savedInstanceState.putBoolean("hideLifecycleTimer", hideLifecycleTimer);
+        savedInstanceState.putLong("timeLimit", timeLimitInSeconds);
+        savedInstanceState.putBoolean("useImageButtons", useImageButtons);
 
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
@@ -126,7 +160,12 @@ public class MultipleChoiceActivity extends AppCompatActivity {
         availableAttempts = savedInstanceState.getInt("availableAttempts");
         passCount = savedInstanceState.getInt("passCount");
         failCount = savedInstanceState.getInt("failCount");
-
+        hideOnScreenTimer = savedInstanceState.getBoolean("hideOnScreenTimer");
+        hideLifecycleTimer = savedInstanceState.getBoolean("hideLifecycleTimer");
+        timeLimitInSeconds = savedInstanceState.getLong("timeLimit");
+        useImageButtons = savedInstanceState.getBoolean("useImageButtons");
+        showTimerConfigPreference();
+        showButtonConfigPreference();
     }
 
     @Override

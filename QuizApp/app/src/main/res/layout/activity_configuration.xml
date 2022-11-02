@@ -1,68 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ConfigurationActivity">
 
-    <TextView
-        android:id="@+id/tvSetTimeLimitSection"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="Set Time Limit for Question"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/tvHideTimerSection"
-        app:layout_constraintTop_toBottomOf="@+id/switchQ1AppLifecycleTimer" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <Switch
-        android:id="@+id/switchQ1AppLifecycleTimer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="App Lifecycle Timer"
-        app:layout_constraintStart_toStartOf="@+id/tvHideTimerSection"
-        app:layout_constraintTop_toBottomOf="@+id/switchQ1OnScreenTimer" />
+        <Switch
+            android:id="@+id/switchUseImgBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Use Image Buttons"
+            app:layout_constraintStart_toStartOf="@+id/tvHideTimerSection"
+            app:layout_constraintTop_toBottomOf="@+id/tvUseImgBtnTitle" />
 
-    <TextView
-        android:id="@+id/tvHideTimerSection"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="40dp"
-        android:text="Hide Timers"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/tvUseImgBtnTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="Use Image Buttons"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/tvHideTimerSection"
+            app:layout_constraintTop_toBottomOf="@+id/etTimeLimit" />
 
-    <Switch
-        android:id="@+id/switchQ1OnScreenTimer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="On Screen Timer"
-        app:layout_constraintStart_toStartOf="@+id/tvHideTimerSection"
-        app:layout_constraintTop_toBottomOf="@+id/tvHideTimerSection" />
+        <TextView
+            android:id="@+id/tvSetTimeLimitSection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="Set Time Limit for Question"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/tvHideTimerSection"
+            app:layout_constraintTop_toBottomOf="@+id/switchQ1AppLifecycleTimer" />
 
-    <Button
-        android:id="@+id/btnUpdateConfig"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:text="Update"
-        app:layout_constraintStart_toStartOf="@+id/tvHideTimerSection"
-        app:layout_constraintTop_toBottomOf="@+id/etTimeLimit" />
+        <Switch
+            android:id="@+id/switchQ1AppLifecycleTimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="App Lifecycle Timer"
+            app:layout_constraintStart_toStartOf="@+id/tvHideTimerSection"
+            app:layout_constraintTop_toBottomOf="@+id/switchQ1OnScreenTimer" />
 
-    <EditText
-        android:id="@+id/etTimeLimit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:hint="00:05:00"
-        android:inputType="time"
-        app:layout_constraintStart_toStartOf="@+id/tvSetTimeLimitSection"
-        app:layout_constraintTop_toBottomOf="@+id/tvSetTimeLimitSection" />
+        <TextView
+            android:id="@+id/tvHideTimerSection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="40dp"
+            android:text="Hide Timers"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Switch
+            android:id="@+id/switchQ1OnScreenTimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="On Screen Timer"
+            app:layout_constraintStart_toStartOf="@+id/tvHideTimerSection"
+            app:layout_constraintTop_toBottomOf="@+id/tvHideTimerSection" />
+
+        <Button
+            android:id="@+id/btnUpdateConfig"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="Update"
+            app:layout_constraintStart_toStartOf="@+id/tvHideTimerSection"
+            app:layout_constraintTop_toBottomOf="@+id/switchUseImgBtn" />
+
+        <EditText
+            android:id="@+id/etTimeLimit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:hint="00:05:00"
+            android:inputType="time"
+            app:layout_constraintStart_toStartOf="@+id/tvSetTimeLimitSection"
+            app:layout_constraintTop_toBottomOf="@+id/tvSetTimeLimitSection" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</ScrollView>
