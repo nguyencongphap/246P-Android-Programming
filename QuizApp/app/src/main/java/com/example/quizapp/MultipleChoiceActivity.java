@@ -36,10 +36,22 @@ public class MultipleChoiceActivity extends AppCompatActivity {
     private boolean useImageButtons;
     private boolean questionIsFinished;
 
+    // TODO: Delete later
+    private Button btn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiple_choice);
+
+        // TODO: Delete later
+        btn = findViewById(R.id.button);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickStartDelayedMessageService();
+            }
+        });
 
         availableAttempts = getResources().getStringArray(R.array.mc_answers).length - 2;
         onScreenTimer = new Timer();
@@ -78,6 +90,13 @@ public class MultipleChoiceActivity extends AppCompatActivity {
         lifeCycleTimer.allowTimerToRun();
         runTimer(onScreenTimer, findViewById(R.id.tvOnScreenTimerMC));
         runTimer(lifeCycleTimer, findViewById(R.id.tvTotalTimerMC));
+    }
+
+    private void onClickStartDelayedMessageService() {
+        Intent intent = new Intent(this, DelayedMessageService.class);
+        intent.putExtra(DelayedMessageService.EXTRA_MESSAGE, getString(R.string.response));
+
+        startService(intent);
     }
 
     ActivityResultLauncher<Intent> configurationActivityLauncher = registerForActivityResult(
