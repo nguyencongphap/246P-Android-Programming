@@ -168,14 +168,21 @@ public class FillInTheBlankActivity extends AppCompatActivity {
     }
 
     private void showResultToast() {
-        // Use another thread to show toast
-        final Handler handler = new Handler();
-        handler.post(new Runnable() {
+        // Use a thread other than the main application thread to show toast
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Toast.makeText(timerService, "You have failed your quiz", Toast.LENGTH_LONG).show();
             }
         });
+
+//        final Handler handler = new Handler();
+//        handler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                Toast.makeText(timerService, "You have failed your quiz", Toast.LENGTH_LONG).show();
+//            }
+//        });
     }
 
     private void showNotification(final String title, final String text, final int NOTIFICATION_ID) {

@@ -242,14 +242,21 @@ public class MultipleChoiceActivity extends AppCompatActivity {
     }
 
     private void showResultToast() {
-        // Use another thread to show toast
-        final Handler handler = new Handler();
-        handler.post(new Runnable() {
+        // Use a thread other than the main application thread to show toast
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Toast.makeText(timerService, "You have failed your quiz", Toast.LENGTH_LONG).show();
             }
         });
+
+//        final Handler handler = new Handler();
+//        handler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                Toast.makeText(timerService, "You have failed your quiz", Toast.LENGTH_LONG).show();
+//            }
+//        });
     }
 
     private void showNotification(final String title, final String text, final int NOTIFICATION_ID) {
@@ -272,7 +279,7 @@ public class MultipleChoiceActivity extends AppCompatActivity {
         // Create a pending intent
         PendingIntent actionPendingIntent = PendingIntent.getActivity(
                 this,
-                0,
+                0,  // parameter is a flag that's used if we ever need to retrieve the pending intent. We don't need to, so we use 0.
                 actionIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT); // This means that if there's a matching pending intent, its Extras will be updated with the current's Extras
         builder.setContentIntent(actionPendingIntent);
