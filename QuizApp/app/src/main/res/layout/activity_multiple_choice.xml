@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".MultipleChoiceActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/MCQuestionTextView"
@@ -78,10 +78,10 @@
             android:layout_height="66dp"
             android:text="Total time:"
             app:layout_constraintStart_toStartOf="@+id/tvOnScreenTimerTitleMC"
-            app:layout_constraintTop_toTopOf="@+id/tvTotalTimerMC" />
+            app:layout_constraintTop_toTopOf="@+id/tvLifecycleTimerMC" />
 
         <TextView
-            android:id="@+id/tvTotalTimerMC"
+            android:id="@+id/tvLifecycleTimerMC"
             android:layout_width="104dp"
             android:layout_height="37dp"
             android:layout_marginTop="44dp"
@@ -119,15 +119,6 @@
             app:layout_constraintStart_toStartOf="@+id/btnSubmitMC"
             app:layout_constraintTop_toBottomOf="@+id/btnSubmitMC"
             app:srcCompat="@android:drawable/ic_menu_gallery" />
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:text="@string/question"
-            app:layout_constraintStart_toStartOf="@+id/imgbtnSubmitMC"
-            app:layout_constraintTop_toBottomOf="@+id/imgbtnSubmitMC" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

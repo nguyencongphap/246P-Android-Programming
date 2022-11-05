@@ -8,22 +8,22 @@ public class Timer implements Parcelable {
     private long seconds;
     private boolean isRunning;
 
-    // Normal constructor, since this is still a normal object
     public Timer() {
         this.seconds = 0;
-        this.isRunning = false;
+        this.isRunning = true;
     }
 
-    public void reset() {
-        seconds = 0;
-    }
-
-    public void allowTimerToRun() {
+    public void runTimer() {
         isRunning = true;
     }
 
     public void stopTimer() {
         isRunning = false;
+    }
+
+    public void resetTimer() {
+        seconds = 0;
+        isRunning = true;
     }
 
     public long getSeconds() {
@@ -44,6 +44,18 @@ public class Timer implements Parcelable {
         long secs = seconds%60;
         return String.format("%02d:%02d:%02d", hours, minutes, secs);
     }
+
+    public void incrementOneSecond() {
+        if (isRunning) {
+            if ( seconds + 1L > Long.MAX_VALUE) {
+                seconds = 0;
+            }
+            else {
+                seconds += 1L;
+            }
+        }
+    }
+
 
     // This is where you write the values you want to save to the `Parcel`.
     // The `Parcel` class has methods defined to help you save all of your values.

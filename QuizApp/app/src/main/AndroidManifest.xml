@@ -10,8 +10,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QuizApp">
         <service
-            android:name=".DelayedMessageService"
+            android:name=".TimerService"
+            android:enabled="true"
             android:exported="false"></service>
+        <service
+            android:name=".OdometerService"
+            android:enabled="true"
+            android:exported="false"></service>
+        <service
+            android:name=".DelayedMessageService"
+            android:exported="false" />
 
         <activity
             android:name=".ConfigurationActivity"

@@ -57,6 +57,7 @@ public class ResultActivity extends AppCompatActivity {
     private void retakeQuiz() {
         Intent i = new Intent(this, MultipleChoiceActivity.class);
         startActivity(i);
+        finish();
     }
 
     private void displayQuizResultMessage() {
