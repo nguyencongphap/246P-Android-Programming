@@ -17,7 +17,7 @@ public class MainActivitySample extends AppCompatActivity
 
     }
 
-    // Provide the implementation for the method of the WorkoutListFragment.Listener interface
+    // Provide the implementation for the method of the WorkoutListFragment.TaskListFragmentListener interface
     @Override
     public void itemClicked(long id) {
         View fragmentContainer = findViewById(R.id.fragTaskDetailContainer);

@@ -5,6 +5,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -17,7 +18,10 @@ import android.widget.Button;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements TaskListFragment.Listener{
+public class MainActivity extends AppCompatActivity
+        implements TaskListFragment.TaskListFragmentListener,
+        TaskDetailFragment.TaskDetailFragmentListener
+{
 
     private static final String TAG = "PhapNguyen from MainActivity";
     public static final String NEW_TASK = "newTask";
@@ -80,12 +84,11 @@ public class MainActivity extends AppCompatActivity implements TaskListFragment.
         View fragTaskDetailContainer = findViewById(R.id.fragTaskDetailContainer);
         if (fragTaskDetailContainer != null) { // Tablet version flow
             // Create a new fragment everytime the user clicks and add it to the FrameLayout
-            TaskDetailFragment taskDetailFragment = new TaskDetailFragment();
+            TaskDetailFragment taskDetailFragment = TaskDetailFragment
+                    .newInstance(selectedTask, taskListFragmentViewModel.getTaskList(), (int) id);
+
 //            // Populate data of the selected task into the views of taskDetailFragment
-            taskDetailFragment.setSelectedTask(selectedTask);
-//            TaskDetailActivityViewModel taskDetailActivityViewModel = new ViewModelProvider(this).get(TaskDetailActivityViewModel.class);
-//            taskDetailActivityViewModel.setSelectedTask(selectedTask);
-//            taskDetailFragment.setTaskDetailActivityViewModel(taskDetailActivityViewModel);
+//            taskDetailFragment.setSelectedTask(selectedTask);
 
             // Add the fragment to the FrameLayout fragmentContainer
             // add, replace, or remove fragments at runtime using a fragment transaction.
@@ -129,9 +132,17 @@ public class MainActivity extends AppCompatActivity implements TaskListFragment.
     }
 
     @Override
+    public void onSaveTaskDetail() {
+        TaskListFragment taskListFragment = (TaskListFragment) getSupportFragmentManager().findFragmentById(R.id.fragTaskListContainer);
+        taskListFragment.getTaskAdapter().notifyDataSetChanged();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
 
         Log.d(TAG, "onDestroy in MainActivity: ");
     }
+
+
 }

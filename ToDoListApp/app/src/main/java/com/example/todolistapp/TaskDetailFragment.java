@@ -1,39 +1,75 @@
 package com.example.todolistapp;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class TaskDetailFragment extends Fragment {
     private static final String TAG = "PhapNguyen in TaskDetailFragment";
     private static final String SELECTED_TASK = "selectedTask";
+    private static final String TASK_LIST = "taskList";
+    private static final String SELECTED_TASK_ID = "selectedTaskId";
 
     public TaskDetailFragment() {
         // Required empty public constructor
     }
 
+    private TaskDetailFragmentListener listener;
     private Task selectedTask;
-    private TaskListFragmentViewModel taskListFragmentViewModel;
+    private ArrayList<Task> taskList;
+    private int selectedTaskId;
+
+    static interface TaskDetailFragmentListener {
+        public void onSaveTaskDetail();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        listener = (TaskDetailFragmentListener) context;
+    }
 
     @NonNull
-    public static TaskDetailFragment newInstance(Task selectedTask) {
+    public static TaskDetailFragment newInstance(Task selectedTask, ArrayList<Task> taskList, int selectedTaskId) {
         TaskDetailFragment newTaskDetailFragment = new TaskDetailFragment();
 
         Bundle args = new Bundle();
         args.putParcelable(SELECTED_TASK, selectedTask);
+        args.putParcelableArrayList(TASK_LIST, taskList);
+        args.putInt(SELECTED_TASK_ID, selectedTaskId);
         newTaskDetailFragment.setArguments(args);
 
         return newTaskDetailFragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle args = getArguments();
+        Log.d(TAG, "savedInstanceState != null: " + (savedInstanceState != null));
+        Log.d(TAG, "args != null: " + (args != null));
+
+        if (args != null) {
+            selectedTask = getArguments().getParcelable(SELECTED_TASK);
+            taskList = getArguments().getParcelableArrayList(TASK_LIST);
+            selectedTaskId = getArguments().getInt(SELECTED_TASK_ID);
+        }
     }
 
     // This is the onCreateView() method. It's called when Android needs the fragment's layout
@@ -42,8 +78,6 @@ public class TaskDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         Log.d(TAG, "onCreateView in TaskDetailFragment is CALLED: ");
-
-
 
         // The onCreateView() method returns a View object that represents the fragment's user
         // interface.
@@ -77,7 +111,7 @@ public class TaskDetailFragment extends Fragment {
         View view = getView();
         if (view != null) {
             TextView tvTaskTitle = view.findViewById(R.id.etTaskTitle);
-            tvTaskTitle.setText(selectedTask.getTitle());
+            tvTaskTitle.setText(selectedTask.getTitle());   // TODO: Debug NullPtrException right here
             TextView tvDescription = view.findViewById(R.id.etTaskDescription);
             tvDescription.setText(selectedTask.getDescription());
             String taskStatus = selectedTask.getStatus();
@@ -90,6 +124,16 @@ public class TaskDetailFragment extends Fragment {
             else if (taskStatus.equals(Task.DONE)) {
                 ((RadioButton) view.findViewById(R.id.radBtnDONE)).setChecked(true);
             }
+
+            Button btnSaveTask = getView().findViewById(R.id.btnSaveTask);
+            btnSaveTask.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    saveTask();
+                }
+            });
+
+
         }
     }
 
@@ -106,6 +150,29 @@ public class TaskDetailFragment extends Fragment {
 
         if (savedInstanceState != null) {
             selectedTask = savedInstanceState.getParcelable(SELECTED_TASK);
+        }
+    }
+
+    private void saveTask() {
+        View view = getView();
+        if (view != null) {
+            EditText etTaskTitle = view.findViewById(R.id.etTaskTitle);
+            selectedTask.setTitle(String.valueOf(etTaskTitle.getText()));
+            EditText etTaskDescription = view.findViewById(R.id.etTaskDescription);
+            selectedTask.setDescription(String.valueOf(etTaskDescription.getText()));
+            if (((RadioButton) view.findViewById(R.id.radBtnTODO)).isChecked()) {
+                selectedTask.setStatus(Task.TODO);
+            }
+            else if (((RadioButton) view.findViewById(R.id.radBtnDOING)).isChecked()) {
+                selectedTask.setStatus(Task.DOING);
+            }
+            else if (((RadioButton) view.findViewById(R.id.radBtnDONE)).isChecked()) {
+                selectedTask.setStatus(Task.DONE);
+            }
+
+            if (listener != null) {
+                listener.onSaveTaskDetail();
+            }
         }
     }
 

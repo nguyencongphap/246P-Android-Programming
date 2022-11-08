@@ -1,29 +1,18 @@
 package com.example.todolistapp;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.ListFragment;
-import androidx.lifecycle.LifecycleEventObserver;
-import androidx.lifecycle.LifecycleObserver;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
 
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 // TODO: Implement Task Adapter
 // TODO: Adapter has the built-in addAll() method that takes in an ArrayList<Task> and populate it into Views
@@ -36,18 +25,15 @@ public class TaskListFragment extends ListFragment {
 
     // Define an interface here so that any activity that implements this interface
     // can communicate with this fragment and vice versa.
-    static interface Listener {
+    interface TaskListFragmentListener {
         void itemClicked(long id);
         ArrayList<Task> getTaskList();
-    };
+    }
 
     private static final String TAG = "PhapNguyen in TaskListFragment";
     // Save a reference to the activity to which WorkoutFragment gets attached
-    private Listener listener;
-    private static final String TASK_LIST = "taskList";
+    private TaskListFragmentListener listener;
     private TaskAdapter taskAdapter;
-    ArrayAdapter<String> taskTitlesAdapter;
-
 
     // This is the context (in this case, the activity) the fragment is attached to
     // this allows the fragment to communicate with the activity it attaches to
@@ -55,11 +41,11 @@ public class TaskListFragment extends ListFragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        listener = (Listener) context;
+        listener = (TaskListFragmentListener) context;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment. Don't need to specify layout file because this
@@ -102,5 +88,9 @@ public class TaskListFragment extends ListFragment {
         super.onDetach();
 
         Log.d(TAG, "onDetach in TaskListFragment: ");
+    }
+
+    public TaskAdapter getTaskAdapter() {
+        return taskAdapter;
     }
 }
