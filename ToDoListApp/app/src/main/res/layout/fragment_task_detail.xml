@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TaskDetailFragment">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/etTaskTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:hint="Title"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.066"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnRemoveTask" />
+
+    <EditText
+        android:id="@+id/etTaskDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:hint="Description"
+        android:inputType="textMultiLine"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/etTaskTitle"
+        app:layout_constraintTop_toBottomOf="@+id/etTaskTitle" />
+
+    <Button
+        android:id="@+id/btnRemoveTask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Remove"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupTaskStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="@+id/etTaskTitle"
+        app:layout_constraintTop_toBottomOf="@+id/etTaskDescription">
+
+        <!--adding a radio button -->
+        <RadioButton
+            android:id="@+id/radBtnTODO"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:checked="false"
+            android:padding="4dp"
+            android:text="TODO"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+        <!--adding a radio button -->
+        <RadioButton
+            android:id="@+id/radBtnDOING"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:checked="false"
+            android:padding="4dp"
+            android:text="DOING"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            />
+
+        <!--adding a radio button -->
+        <RadioButton
+            android:id="@+id/radBtnDONE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:checked="false"
+            android:padding="4dp"
+            android:text="DONE"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            />
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btnSaveTask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:text="Save"
+        app:layout_constraintStart_toStartOf="@+id/radioGroupTaskStatus"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroupTaskStatus" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
