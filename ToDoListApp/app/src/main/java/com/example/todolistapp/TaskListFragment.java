@@ -61,6 +61,8 @@ public class TaskListFragment extends ListFragment {
         ArrayList<Task>  taskList;
         if (listener != null) {
             taskList = listener.getTaskList();
+
+            Log.d(TAG, "taskList.size(): " + taskList.size());
         }
         else {
             taskList = new ArrayList<>();

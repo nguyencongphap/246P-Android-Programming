@@ -4,6 +4,8 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -12,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -24,10 +27,14 @@ public class MainActivity extends AppCompatActivity
 {
 
     private static final String TAG = "PhapNguyen from MainActivity";
+    private static boolean USING_TABLET_LAYOUT;
+    public static final int INVALID_TASK_ID = -1;
     public static final String NEW_TASK = "newTask";
 
     private TaskListFragmentViewModel taskListFragmentViewModel;
     private Button btnAddTask;
+
+    private Task selectedTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,13 +86,14 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "itemClicked in MainActivity: ");
 
         // param id is the row ID of the item clicked received from the fragment
-        Task selectedTask = taskListFragmentViewModel.getTaskList().get((int) id);
+        int selectedTaskId = (int) id;
+        selectedTask = taskListFragmentViewModel.getTaskList().get(selectedTaskId);
 
         View fragTaskDetailContainer = findViewById(R.id.fragTaskDetailContainer);
         if (fragTaskDetailContainer != null) { // Tablet version flow
             // Create a new fragment everytime the user clicks and add it to the FrameLayout
             TaskDetailFragment taskDetailFragment = TaskDetailFragment
-                    .newInstance(selectedTask, taskListFragmentViewModel.getTaskList(), (int) id);
+                    .newInstance(selectedTask, taskListFragmentViewModel.getTaskList(), selectedTaskId);
 
 //            // Populate data of the selected task into the views of taskDetailFragment
 //            taskDetailFragment.setSelectedTask(selectedTask);
@@ -111,7 +119,45 @@ public class MainActivity extends AppCompatActivity
         else { // Mobile version flow
             Intent i = new Intent(MainActivity.this, TaskDetailActivity.class);
             i.putExtra(TaskDetailActivity.SELECTED_TASK, selectedTask);
-            startActivity(i);
+            i.putExtra(TaskDetailActivity.SELECTED_TASK_ID, selectedTaskId);
+            taskDetailActivityLauncher.launch(i);
+        }
+    }
+
+    ActivityResultLauncher<Intent> taskDetailActivityLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    handleActivityResultFromTaskDetailActivity(result);
+                }
+            }
+    );
+
+    private void handleActivityResultFromTaskDetailActivity(ActivityResult result) {
+        if (result.getResultCode() == Activity.RESULT_OK) {
+            Intent data = result.getData();
+
+            if (data.getBooleanExtra(TaskDetailActivity.TASK_IS_UPDATED, false)) {
+                Task updatedTask = data.getParcelableExtra(TaskDetailActivity.UPDATED_TASK);
+                int selectedTaskId = data.getIntExtra(TaskDetailActivity.SELECTED_TASK_ID, INVALID_TASK_ID);
+                if (updatedTask != null && selectedTaskId != INVALID_TASK_ID) {
+                    Log.d(TAG, "Call onUpdateTaskDetail from handling DetailActivity: ");
+
+                    onUpdateTaskDetail(updatedTask, selectedTaskId);
+                }
+            }
+            else if (data.getBooleanExtra(TaskDetailActivity.TASK_IS_REMOVED, false)) {
+                int selectedTaskId = data.getIntExtra(TaskDetailActivity.SELECTED_TASK_ID, INVALID_TASK_ID);
+                if (selectedTaskId != INVALID_TASK_ID) {
+                    Log.d(TAG, "Call onRemoveTask from handling DetailActivity: ");
+
+                    taskListFragmentViewModel.getTaskList().remove(selectedTaskId);
+                    TaskListFragment taskListFragment = (TaskListFragment) getSupportFragmentManager().findFragmentById(R.id.fragTaskListContainer);
+                    taskListFragment.getTaskAdapter().notifyDataSetChanged();
+                }
+            }
+
         }
     }
 
@@ -127,14 +173,25 @@ public class MainActivity extends AppCompatActivity
 
     private void addNewTaskToTaskList(Task newTask) {
         taskListFragmentViewModel.addTask(newTask);
+        TaskListFragment taskListFragment = (TaskListFragment) getSupportFragmentManager().findFragmentById(R.id.fragTaskListContainer);
+        taskListFragment.getTaskAdapter().notifyDataSetChanged();
 
         Log.d(TAG, "Finished addNewTaskToTaskList in MainActivity: ");
     }
 
     @Override
-    public void onSaveTaskDetail() {
+    public void onUpdateTaskDetail(Task newTask, int selectedTaskId) {
+        taskListFragmentViewModel.getTaskList().set(selectedTaskId, newTask);
         TaskListFragment taskListFragment = (TaskListFragment) getSupportFragmentManager().findFragmentById(R.id.fragTaskListContainer);
         taskListFragment.getTaskAdapter().notifyDataSetChanged();
+    }
+
+    @Override
+    public void onRemoveTask(int selectedTaskId) {
+        taskListFragmentViewModel.getTaskList().remove(selectedTaskId);
+        TaskListFragment taskListFragment = (TaskListFragment) getSupportFragmentManager().findFragmentById(R.id.fragTaskListContainer);
+        taskListFragment.getTaskAdapter().notifyDataSetChanged();
+        getSupportFragmentManager().popBackStack(getSupportFragmentManager().getBackStackEntryAt(0).getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
     @Override

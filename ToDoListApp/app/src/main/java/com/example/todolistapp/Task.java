@@ -20,6 +20,10 @@ public class Task implements Parcelable {
         this.status = TODO;
     }
 
+    public Task() {
+
+    }
+
     public String getTitle() {
         return title;
     }

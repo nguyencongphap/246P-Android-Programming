@@ -33,8 +33,9 @@ public class TaskDetailFragment extends Fragment {
     private ArrayList<Task> taskList;
     private int selectedTaskId;
 
-    static interface TaskDetailFragmentListener {
-        public void onSaveTaskDetail();
+    interface TaskDetailFragmentListener {
+        void onUpdateTaskDetail(Task newTask, int selectedTaskId);
+        void onRemoveTask(int selectedTaskId);
     }
 
     @Override
@@ -133,7 +134,13 @@ public class TaskDetailFragment extends Fragment {
                 }
             });
 
-
+            Button btnRemoveTask = getView().findViewById(R.id.btnRemoveTask);
+            btnRemoveTask.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    removeTask();
+                }
+            });
         }
     }
 
@@ -156,27 +163,38 @@ public class TaskDetailFragment extends Fragment {
     private void saveTask() {
         View view = getView();
         if (view != null) {
+            Task newTask = new Task();
             EditText etTaskTitle = view.findViewById(R.id.etTaskTitle);
-            selectedTask.setTitle(String.valueOf(etTaskTitle.getText()));
+            newTask.setTitle(String.valueOf(etTaskTitle.getText()));
             EditText etTaskDescription = view.findViewById(R.id.etTaskDescription);
-            selectedTask.setDescription(String.valueOf(etTaskDescription.getText()));
+            newTask.setDescription(String.valueOf(etTaskDescription.getText()));
             if (((RadioButton) view.findViewById(R.id.radBtnTODO)).isChecked()) {
-                selectedTask.setStatus(Task.TODO);
+                newTask.setStatus(Task.TODO);
             }
             else if (((RadioButton) view.findViewById(R.id.radBtnDOING)).isChecked()) {
-                selectedTask.setStatus(Task.DOING);
+                newTask.setStatus(Task.DOING);
             }
             else if (((RadioButton) view.findViewById(R.id.radBtnDONE)).isChecked()) {
-                selectedTask.setStatus(Task.DONE);
+                newTask.setStatus(Task.DONE);
             }
 
             if (listener != null) {
-                listener.onSaveTaskDetail();
+                listener.onUpdateTaskDetail(newTask, selectedTaskId);
             }
+        }
+    }
+
+    private void removeTask() {
+        if (listener != null) {
+            listener.onRemoveTask(selectedTaskId);
         }
     }
 
     public void setSelectedTask(Task selectedTask) {
         this.selectedTask = selectedTask;
+    }
+
+    public void setSelectedTaskId(int selectedTaskId) {
+        this.selectedTaskId = selectedTaskId;
     }
 }

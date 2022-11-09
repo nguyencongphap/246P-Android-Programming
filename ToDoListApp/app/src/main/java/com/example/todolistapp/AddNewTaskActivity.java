@@ -41,7 +41,7 @@ public class AddNewTaskActivity extends AppCompatActivity {
             // Pass relevant data back as a result
             i.putExtra(MainActivity.NEW_TASK, newTask);
             // Activity finished ok, return the data
-            setResult(RESULT_OK, i); // set result code and bundle data for response
+            setResult(RESULT_OK, i);
             finish(); // closes the activity, pass data to parent
         }
     }
