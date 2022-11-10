@@ -26,8 +26,9 @@ public class TaskDetailActivity extends AppCompatActivity
 
         TaskDetailFragment taskDetailFragment = (TaskDetailFragment) getSupportFragmentManager().findFragmentById(R.id.fragTaskDetailContainer);
         selectedTask = getIntent().getParcelableExtra(SELECTED_TASK);
-        taskDetailFragment.setSelectedTask(getIntent().getParcelableExtra(SELECTED_TASK));
-        taskDetailFragment.setSelectedTaskId(getIntent().getIntExtra(SELECTED_TASK_ID, -1));
+        taskDetailFragment.setSelectedTask(selectedTask);
+        int selectedTaskId = getIntent().getIntExtra(SELECTED_TASK_ID, -1);
+        taskDetailFragment.setSelectedTaskId(selectedTaskId);
     }
 
     @Override

@@ -12,6 +12,7 @@ public class TaskListFragmentViewModel extends ViewModel {
     private String taskListSortKey;
     private String taskListSortOrder;
     private boolean usingTabletLayout = false;
+    private String titleSearchQuery = "";
 
     public TaskListFragmentViewModel() {
         Log.d(TAG, "TaskListFragmentViewModel is created: ");
@@ -47,6 +48,14 @@ public class TaskListFragmentViewModel extends ViewModel {
 
     public void setUsingTabletLayout(boolean usingTabletLayout) {
         this.usingTabletLayout = usingTabletLayout;
+    }
+
+    public String getTitleSearchQuery() {
+        return titleSearchQuery;
+    }
+
+    public void setTitleSearchQuery(String titleSearchQuery) {
+        this.titleSearchQuery = titleSearchQuery;
     }
 
     public void addTask(Task newTask) {

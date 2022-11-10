@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -48,7 +49,6 @@ public class MainActivity extends AppCompatActivity
     public static final String NEW_TASK = "newTask";
 
     private TaskListFragmentViewModel taskListFragmentViewModel;
-    private Button btnAddTask;
     private Task selectedTask;
 
     @Override
@@ -62,7 +62,19 @@ public class MainActivity extends AppCompatActivity
         // is called.
         taskListFragmentViewModel = new ViewModelProvider(MainActivity.this).get(TaskListFragmentViewModel.class);
 
-        btnAddTask = findViewById(R.id.btnStartAddNewTaskActivity);
+        Button btnSearch = findViewById(R.id.btnSearch);
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SearchView searchViewTaskList = findViewById(R.id.searchViewTaskList);
+                taskListFragmentViewModel.setTitleSearchQuery(String.valueOf(
+                        searchViewTaskList.getQuery()
+                ));
+                populateTaskListUsingDatabase();
+            }
+        });
+
+        Button btnAddTask = findViewById(R.id.btnStartAddNewTaskActivity);
         btnAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,12 +151,22 @@ public class MainActivity extends AppCompatActivity
                     taskListFragmentViewModel.getTaskListSortOrder()
                     );
 
+            String selectionPreference = null;
+            String[] selectionArgsPreference = null;
+            if (!taskListFragmentViewModel.getTitleSearchQuery().equals("")) {
+                SearchView searchViewTaskList = findViewById(R.id.searchViewTaskList);
+                selectionPreference = "TITLE LIKE ?";   // search by sub-string rather than an exact match
+                selectionArgsPreference = new String[] {
+                        "%" + String.valueOf(searchViewTaskList.getQuery()) + "%"
+                };
+            }
+
             Log.d(TAG, "orderByPreference: " + orderByPreference);
 
             Cursor cursor = db.query("TASK",
                     new String[] {"_id", "TITLE", "DESCRIPTION", "STATUS"},
-                    null,
-                    null,
+                    selectionPreference,
+                    selectionArgsPreference,
                     null,
                     null,
                     orderByPreference
@@ -221,8 +243,8 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "itemClicked in MainActivity: ");
 
         // param id is the row ID of the item clicked received from the fragment
-        int selectedTaskId = (int) id;
-        selectedTask = taskListFragmentViewModel.getTaskList().get(selectedTaskId);
+        selectedTask = taskListFragmentViewModel.getTaskList().get((int) id);
+        int selectedTaskId = selectedTask.getId();
 
         View fragTaskDetailContainer = findViewById(R.id.fragTaskDetailContainer);
         if (fragTaskDetailContainer != null) { // Tablet version flow
@@ -276,22 +298,20 @@ public class MainActivity extends AppCompatActivity
     private void handleActivityResultFromTaskDetailActivity(ActivityResult result) {
         if (result.getResultCode() == Activity.RESULT_OK) {
             Intent data = result.getData();
-            int selectedTaskPosition = data.getIntExtra(TaskDetailActivity.SELECTED_TASK_ID, INVALID_TASK_ID);
+            int selectedTaskId = data.getIntExtra(TaskDetailActivity.SELECTED_TASK_ID, INVALID_TASK_ID);
 
             if (data.getBooleanExtra(TaskDetailActivity.TASK_IS_UPDATED, false)) {
                 Task updatedTask = data.getParcelableExtra(TaskDetailActivity.UPDATED_TASK);
-                if (updatedTask != null && selectedTaskPosition != INVALID_TASK_ID) {
+                if (updatedTask != null) {
                     Log.d(TAG, "Call onUpdateTaskDetail from handling DetailActivity: ");
 
-                    onUpdateTaskDetail(updatedTask, selectedTaskPosition);
+                    onUpdateTaskDetail(updatedTask, selectedTaskId);
                 }
             }
             else if (data.getBooleanExtra(TaskDetailActivity.TASK_IS_REMOVED, false)) {
-                if (selectedTaskPosition != INVALID_TASK_ID) {
-                    Log.d(TAG, "Call onRemoveTask from handling DetailActivity: ");
+                Log.d(TAG, "Call onRemoveTask from handling DetailActivity: ");
 
-                    onRemoveTask(selectedTaskPosition);
-                }
+                onRemoveTask(selectedTaskId);
             }
 
         }
@@ -337,13 +357,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onUpdateTaskDetail(Task newTask, int selectedTaskPosition) {
-        Task selectedTask =  taskListFragmentViewModel.getTaskList().get(selectedTaskPosition);
-        taskListFragmentViewModel.getTaskList().set(selectedTaskPosition, newTask);
-        TaskListFragment taskListFragment = (TaskListFragment) getSupportFragmentManager().findFragmentById(R.id.fragTaskListContainer);
-        taskListFragment.getTaskAdapter().notifyDataSetChanged();
-
         // Update the corresponding row in database
-        int rowIdToUpdate = selectedTask.getId();
+        int rowIdToUpdate = selectedTaskPosition;
         ContentValues taskValues = generateRowDataFromTask(newTask);
 
         SQLiteOpenHelper todoDatabaseHelper = new ToDoAppDatabaseHelper(this);
@@ -356,21 +371,18 @@ public class MainActivity extends AppCompatActivity
         } catch(SQLiteException e) {
             Toast.makeText(this, "Database unavailable", Toast.LENGTH_SHORT).show();
         }
+
+        populateTaskListUsingDatabase();
     }
 
     @Override
     public void onRemoveTask(int selectedTaskPosition) {
-        Task selectedTask =  taskListFragmentViewModel.getTaskList().get(selectedTaskPosition);
-        taskListFragmentViewModel.getTaskList().remove(selectedTaskPosition);
-        TaskListFragment taskListFragment = (TaskListFragment) getSupportFragmentManager().findFragmentById(R.id.fragTaskListContainer);
-        taskListFragment.getTaskAdapter().notifyDataSetChanged();
-
         if (taskListFragmentViewModel.isUsingTabletLayout()) {
             getSupportFragmentManager().popBackStack(getSupportFragmentManager().getBackStackEntryAt(0).getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
 
         // Delete the corresponding row in database
-        int rowIdToUpdate = selectedTask.getId();
+        int rowIdToUpdate = selectedTaskPosition;
         SQLiteOpenHelper todoDatabaseHelper = new ToDoAppDatabaseHelper(this);
         try {
             Log.d(TAG, "entered try block: ");
@@ -388,6 +400,8 @@ public class MainActivity extends AppCompatActivity
 
             Toast.makeText(this, "Database unavailable", Toast.LENGTH_SHORT).show();
         }
+
+        populateTaskListUsingDatabase();
     }
 
     @Override

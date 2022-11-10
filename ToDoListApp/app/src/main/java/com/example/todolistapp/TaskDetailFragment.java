@@ -164,6 +164,7 @@ public class TaskDetailFragment extends Fragment {
         View view = getView();
         if (view != null) {
             Task newTask = new Task();
+            newTask.setId(selectedTask.getId());
             EditText etTaskTitle = view.findViewById(R.id.etTaskTitle);
             newTask.setTitle(String.valueOf(etTaskTitle.getText()));
             EditText etTaskDescription = view.findViewById(R.id.etTaskDescription);
@@ -179,14 +180,14 @@ public class TaskDetailFragment extends Fragment {
             }
 
             if (listener != null) {
-                listener.onUpdateTaskDetail(newTask, selectedTaskId);
+                listener.onUpdateTaskDetail(newTask, selectedTask.getId());
             }
         }
     }
 
     private void removeTask() {
         if (listener != null) {
-            listener.onRemoveTask(selectedTaskId);
+            listener.onRemoveTask(selectedTask.getId());
         }
     }
 

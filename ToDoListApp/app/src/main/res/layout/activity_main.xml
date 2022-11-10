@@ -15,12 +15,21 @@
         android:layout_weight="2"
         >
 
+        <SearchView
+            android:id="@+id/searchViewTaskList"
+            android:layout_width="260dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <Button
             android:id="@+id/btnStartAddNewTaskActivity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="64dp"
             android:layout_weight="1"
             android:text="New Todo Task"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,7 +40,7 @@
             android:name="com.example.todolistapp.TaskListFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
             android:layout_weight="2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinnerTaskListSortOrder"></fragment>
@@ -40,11 +49,10 @@
             android:id="@+id/tvSortBy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
             android:text="Sort By:"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="@+id/searchViewTaskList"
+            app:layout_constraintTop_toBottomOf="@+id/searchViewTaskList" />
 
         <Spinner
             android:id="@+id/spinnerTaskListSortKeys"
@@ -63,6 +71,16 @@
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="@+id/spinnerTaskListSortKeys"
             app:layout_constraintTop_toBottomOf="@+id/spinnerTaskListSortKeys" />
+
+        <Button
+            android:id="@+id/btnSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="Search"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

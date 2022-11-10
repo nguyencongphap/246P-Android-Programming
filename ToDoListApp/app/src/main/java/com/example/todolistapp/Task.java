@@ -75,6 +75,7 @@ public class Task implements Parcelable {
     // You may need to make several classes Parcelable to send the data you want.
     @Override
     public void writeToParcel(Parcel out, int flags) {
+        out.writeInt(id);
         out.writeString(title);
         out.writeString(description);
         out.writeString(status);
@@ -84,6 +85,7 @@ public class Task implements Parcelable {
     // we originally wrote into the `Parcel`.  This constructor is usually
     // private so that only the `CREATOR` field can access.
     private Task(Parcel in) {
+        id = in.readInt();
         title = in.readString();
         description = in.readString();
         status = in.readString();
