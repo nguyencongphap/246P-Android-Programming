@@ -9,11 +9,40 @@
     android:orientation="horizontal"
     >
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="2"
-        >
+        android:layout_weight="2">
+
+        <TextView
+            android:id="@+id/tvSortBy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Sort By:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Spinner
+            android:id="@+id/spinnerTaskListSortKeys"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:entries="@array/task_list_sorting_keys"
+            app:layout_constraintStart_toStartOf="@+id/tvSortBy"
+            app:layout_constraintTop_toBottomOf="@+id/tvSortBy" />
+
+        <Spinner
+            android:id="@+id/spinnerTaskListSortOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:entries="@array/task_list_sorting_order"
+            app:layout_constraintStart_toStartOf="@+id/spinnerTaskListSortKeys"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerTaskListSortKeys" />
+
 
         <Button
             android:id="@+id/btnStartAddNewTaskActivity"
@@ -31,12 +60,12 @@
             android:name="com.example.todolistapp.TaskListFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:layout_weight="2"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"></fragment>
+            app:layout_constraintTop_toBottomOf="@+id/spinnerTaskListSortOrder"></fragment>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     <FrameLayout
         android:id="@+id/fragTaskDetailContainer"

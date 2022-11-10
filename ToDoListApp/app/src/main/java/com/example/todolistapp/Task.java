@@ -9,6 +9,7 @@ public class Task implements Parcelable {
     public static final String DOING = "DOING";
     public static final String DONE = "DONE";
 
+    private int id;
     private String title;
     private String description;
     private String status;
@@ -22,6 +23,21 @@ public class Task implements Parcelable {
 
     public Task() {
 
+    }
+
+    public Task(int id, String title, String description, String status) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.status = status;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {

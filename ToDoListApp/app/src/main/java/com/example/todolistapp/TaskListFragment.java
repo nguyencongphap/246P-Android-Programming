@@ -57,6 +57,10 @@ public class TaskListFragment extends ListFragment {
     public void onStart() {
         super.onStart();
 
+        createBindNewTaskAdapter();
+    }
+
+    public void createBindNewTaskAdapter() {
         // Create the adapter to convert the array to views
         ArrayList<Task>  taskList;
         if (listener != null) {
